@@ -13,10 +13,6 @@ export default {
   components: {
     WheatherApp,
   },
-
-  mounted() {
-    console.log(process.env);
-  },
 };
 </script>
 
