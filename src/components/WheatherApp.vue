@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { getFavoritedCities, getWheaterByCityId } from '../services';
+
 export default {
   name: 'WheatherApp',
 
@@ -68,8 +70,13 @@ export default {
       currentCity: null,
     };
   },
+
   mounted() {
-    //
+    this.favoritedCities = getFavoritedCities();
+
+    [this.currentCity] = this.favoritedCities;
+
+    this.currentCity = getWheaterByCityId(this.currentCity.id);
   },
 };
 </script>
