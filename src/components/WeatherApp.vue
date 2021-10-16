@@ -45,7 +45,7 @@
               <div class="hourly-weather__item__humidity">{{ hour.humidity }}%</div>
               <div class="hourly-weather__item__icon">{{ hour.weather[0].main }}</div>
               <div class="hourly-weather__info__time">
-                {{ hour.dt }}
+                {{ getHour(hour.dt) }}
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@
               <div class="daily-weather__item__icon">{{ day.weather[0].main }}</div>
               <div class="daily-weather__item__info">
                 <div class="daily-weather__info__title">
-                  {{  day.dt }}
+                  {{  getDayAndMonth(day.dt) }}
                 </div>
                 <div class="daily-weather__info__subtitle">
                   {{ day.weather[0].description }}
@@ -92,6 +92,9 @@
 </template>
 
 <script>
+import fromUnixTime from 'date-fns/fromUnixTime';
+import format from 'date-fns/format';
+
 import { getFavoritedCities, getWeatherByCity } from '../services';
 
 export default {
@@ -132,6 +135,19 @@ export default {
     citySelection(city) {
       this.currentCity = city;
       this.getWeather();
+    },
+    timeFormat(unixTime) {
+      return fromUnixTime(unixTime);
+    },
+    getHour(unixTime) {
+      const date = this.timeFormat(unixTime);
+
+      return format(date, 'hh:mm aa');
+    },
+    getDayAndMonth(unixTime) {
+      const date = this.timeFormat(unixTime);
+
+      return format(date, 'iii, LLL d');
     },
   },
 };
@@ -198,7 +214,7 @@ body {
   display: flex;
   flex-direction: row;
   overflow-x: auto;
-  padding: .5rem;
+  padding: .25rem;
 }
 
 .city-hourly-weather__list__item {
@@ -206,6 +222,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: .5rem;
+  min-width: 80px;
 
   div {
     padding: .25rem;
