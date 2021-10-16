@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <WheatherApp msg="Welcome to Your Vue.js App"/>
+    <WeatherApp msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import WheatherApp from './components/WheatherApp.vue';
+import WeatherApp from './components/WeatherApp.vue';
 
 export default {
   name: 'App',
 
   components: {
-    WheatherApp,
+    WeatherApp,
   },
 };
 </script>

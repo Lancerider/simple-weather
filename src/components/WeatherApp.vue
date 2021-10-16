@@ -3,7 +3,7 @@
 
     <div class="app__header">
       <div class="header__title">
-        Simple Wheater
+        Simple Weather
       </div>
       <div class="header_search-icon"></div>
     </div>
@@ -19,6 +19,12 @@
         </div>
       </div>
 
+      <div
+        v-if="showLoadingWeatherError && !weatherData"
+        class="loading-error"
+      >
+        Something went wrong, try again
+      </div>
       <div class="city-hourly-weather__container">
         <div class="city-hourly-weather__title">Next hours</div>
         <div class="city-hourly-weather__list">
@@ -33,7 +39,13 @@
         </div>
       </div>
 
-      <div class="city-daily-wheather__container">
+      <div
+        v-if="showLoadingWeatherError && !weatherData"
+        class="loading-error"
+      >
+        Something went wrong
+      </div>
+      <div class="city-daily-weather__container">
         <div class="city-daily-weather__title">Next 5 days</div>
         <div class="city-daily-weather__list">
           <div class="city-daily-weather__list__item">
@@ -59,24 +71,43 @@
 </template>
 
 <script>
-import { getFavoritedCities, getWheaterByCityId } from '../services';
+import { getFavoritedCities, getWeatherByCity } from '../services';
 
 export default {
-  name: 'WheatherApp',
+  name: 'WeatherApp',
 
   data() {
     return {
       favoritedCities: [],
       currentCity: null,
+      weatherData: null,
+      showLoadingWeatherError: false,
     };
   },
 
-  mounted() {
+  async mounted() {
     this.favoritedCities = getFavoritedCities();
 
     [this.currentCity] = this.favoritedCities;
+    this.getWeathers();
+  },
 
-    this.currentCity = getWheaterByCityId(this.currentCity.id);
+  methods: {
+    async getWeathers() {
+      this.loadingWeatherData = true;
+      this.showLoadingWeatherError = false;
+
+      try {
+        const response = await getWeatherByCity(this.currentCity);
+
+        this.weatherData = response.data;
+        console.log('weatherData', this.weatherData);
+      } catch (error) {
+        this.showLoadingWeatherError = true;
+      }
+
+      this.loadingWeatherData = false;
+    },
   },
 };
 </script>
